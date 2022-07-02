@@ -1,6 +1,7 @@
 using System;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.TestTools.Constraints;
 
 namespace K13A.BehaviourEditor
 {
@@ -12,16 +13,18 @@ namespace K13A.BehaviourEditor
         public GUIContent Content;
         public Action action;
         public GUIStyle Style;
+        public int id;
 
         #endregion
 
         #region Properties
 
-        public TitleOption(GUIContent Content, Action action)
+        public TitleOption(GUIContent Content, Action action, int id = default)
         {
             this.Content = Content;
             this.action = action;
             this.Style = new GUIStyle(GUI.skin.window);
+            this.id = id;
             //this.Style.normal.background * 10;
         }
         

@@ -28,7 +28,7 @@ namespace K13A.BehaviourEditor
             }
         }
 
-        public static void DrawTitle(string Title, Action contant, ContentStyle style, TitleOption[] additionalOptions = null)
+        public static void DrawTitle(string Title, Action contant, ContentStyle style = null, TitleOption[] additionalOptions = null)
         {
             EditorGUILayout.LabelField("", GUI.skin.window, GUILayout.Height(25));
             EditorGUI.LabelField(GUILayoutUtility.GetLastRect(), $"<size=15>    <b>{Title}</b></size>", GUI.skin.label);
@@ -70,15 +70,18 @@ namespace K13A.BehaviourEditor
             return b;
         }
         
-        public static void MenuBox(string Title, Action contant, ContentStyle style)
+        public static void MenuBox(string Title, Action contant, ContentStyle style = null, TitleOption[] additionalOptions = null)
         {
             var origin_font = GUI.skin.label.font;
             
             EditorGUILayout.BeginVertical();
-                DrawTitle(Title, contant, style);
+                DrawTitle(Title, contant, style, additionalOptions);
                 EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
-                    GUI.skin.label.font = style.font;
-                    if(style.UpperBorder) EditorGUILayout.Space(10);
+                    if(style != null) 
+                    {
+                        GUI.skin.label.font = style.font;
+                        if(style.UpperBorder) EditorGUILayout.Space(10);
+                    }
                     EditorGUILayout.BeginVertical();
                         EditorGUILayout.Space(5);
                         contant.Invoke();
@@ -92,11 +95,11 @@ namespace K13A.BehaviourEditor
             GUI.skin.label.font = origin_font;
         }
         
-        public static void SubMenuBox(string Title, Action contant, ContentStyle style)
+        public static void SubMenuBox(string Title, Action contant, ContentStyle style = null)
         {
             var origin_font = GUI.skin.label.font;
             DrawSubTitle(Title);
-            GUI.skin.label.font = style.font;
+            if(style != null) GUI.skin.label.font = style.font;
             
             EditorGUILayout.BeginVertical();
             contant.Invoke();
@@ -105,7 +108,7 @@ namespace K13A.BehaviourEditor
             GUI.skin.label.font = origin_font;
         }
         
-        public static bool FoldoutMenuBox(string Title, bool b, Action contant, ContentStyle style)
+        public static bool FoldoutMenuBox(string Title, bool b, Action contant, ContentStyle style = null)
         {
             var origin_font = GUI.skin.label.font;
             b = DrawFoldoutTitle(b, Title);
@@ -116,10 +119,12 @@ namespace K13A.BehaviourEditor
                 return b;
             }
             
-            GUI.skin.label.font = style.font;
-            
             EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
-            if(style.UpperBorder) EditorGUILayout.Space(10);
+                if (style != null)
+                {
+                    GUI.skin.label.font = style.font; 
+                    if(style.UpperBorder) EditorGUILayout.Space(10);
+                }
                 EditorGUILayout.BeginVertical();
                     EditorGUILayout.Space(5);
                     contant.Invoke();
