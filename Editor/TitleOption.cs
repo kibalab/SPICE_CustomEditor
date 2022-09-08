@@ -26,6 +26,10 @@ namespace K13A.BehaviourEditor
             this.Style = new GUIStyle(GUI.skin.window);
             this.id = id;
             //this.Style.normal.background * 10;
+            
+            Style.contentOffset = Vector2.zero;
+            Style.padding = new RectOffset(0, 0, 0, 0);
+            Style.alignment = TextAnchor.MiddleCenter;
         }
         
         #endregion
@@ -38,7 +42,7 @@ namespace K13A.BehaviourEditor
                 GUILayoutUtility.GetLastRect().x + GUILayoutUtility.GetLastRect().width - (ID+1) * 25, 
                 GUILayoutUtility.GetLastRect().y + 3, 
                 20, 
-                18), "", Style);
+                18), "N", Style);
 
             if (b)
             {
