@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -139,9 +140,24 @@ namespace K13A.BehaviourEditor
             return b;
         }
 
-        public static float Slider(float value)
+        public static void Slider(ref float value, float leftValue, float rightValue, float warningValue, float ErrorValue)
         {
-            return 0;
+            var warnStyle = new GUIStyle(GUI.skin.box);
+            var ColorTex = new Texture2D(10, 10);
+                ColorTex.SetPixels(Enumerable.Repeat(Color.yellow, 100).ToArray());
+            warnStyle.margin = warnStyle.padding = warnStyle.border = new RectOffset(0, 0, 0, 0);
+            GUILayout.Box(GUIContent.none, warnStyle, GUILayout.ExpandWidth(true), GUILayout.Height(17));
+
+            var lastRect = GUILayoutUtility.GetLastRect();  
+            lastRect.width = lastRect.width * (leftValue + warningValue) / rightValue;
+            lastRect.x += lastRect.width;
+            GUI.Box(lastRect, ColorTex, warnStyle);
+            
+            lastRect = GUILayoutUtility.GetLastRect();
+            lastRect.width = lastRect.width * (leftValue + ErrorValue) / rightValue;
+            lastRect.x += lastRect.width;
+            GUI.Box(lastRect, ColorTex, warnStyle);
+            value = EditorGUI.Slider(GUILayoutUtility.GetLastRect(), value, leftValue, rightValue);
         }
     }
 }
