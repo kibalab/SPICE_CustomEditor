@@ -38,7 +38,7 @@ public class SPICE_ExampleRenderer : Editor
                 origin.SubMenuBoxTitle = EditorGUILayout.TextField("Sub Menu Box Title", origin.SubMenuBoxTitle);
             });
             
-            EditorUtil.Slider(ref value, 0, 1, 0.5f, 0.8f);
+            EditorUtil.Slider(ref value, 0, 1, 0.5f, 0.9f);
         });
         
         GUILayout.Space(20);
