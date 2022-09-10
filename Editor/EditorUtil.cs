@@ -141,7 +141,7 @@ namespace K13A.BehaviourEditor
             return b;
         }
 
-        public static void Slider(ref float value, float leftValue, float rightValue, float warningValue, float ErrorValue)
+        public static void Slider(ref float value, float leftValue, float rightValue, float warningValue, float ErrorValue, Action OnWarnEnter = null, Action OnErrorEnter = null)
         {
             var warnStyle = new GUIStyle(GUI.skin.box);
             warnStyle.margin = warnStyle.padding = warnStyle.border = new RectOffset(0, 0, 0, 0);
@@ -164,6 +164,15 @@ namespace K13A.BehaviourEditor
             GUI.Box(lastRect, CreateBakcgroundColor( Mathf.RoundToInt(lastRect.width), Mathf.RoundToInt(lastRect.height), new Color(0.5f, 0.2f, 0.2f, 0.5f)), warnStyle);
 
             value = EditorGUI.Slider(GUILayoutUtility.GetLastRect(), value, leftValue, rightValue);
+
+            if (value > ErrorValue)
+            {
+                if(OnErrorEnter != null) OnErrorEnter.Invoke();
+            }
+            else if (value > warningValue)
+            {
+                if(OnWarnEnter != null) OnWarnEnter.Invoke();
+            }
         }
 
         public static GUIContent CreateBakcgroundColor(int w, int h, Color c)
