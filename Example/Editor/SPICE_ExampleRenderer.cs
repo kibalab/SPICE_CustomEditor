@@ -11,6 +11,8 @@ public class SPICE_ExampleRenderer : Editor
 
     public static List<TitleOption> Options = new List<TitleOption>();
 
+    public float value;
+
     public override void OnInspectorGUI()
     {
         origin = (SPICE_ExampleScript)target;
@@ -35,6 +37,8 @@ public class SPICE_ExampleRenderer : Editor
             {
                 origin.SubMenuBoxTitle = EditorGUILayout.TextField("Sub Menu Box Title", origin.SubMenuBoxTitle);
             });
+            
+            EditorUtil.Slider(ref value, 0, 1, 0.5f, 0.9f);
         });
         
         GUILayout.Space(20);

@@ -1,5 +1,7 @@
 using System;
+using System.Linq;
 using UnityEditor;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 namespace K13A.BehaviourEditor
@@ -139,9 +141,56 @@ namespace K13A.BehaviourEditor
             return b;
         }
 
-        public static float Slider(float value)
+        public static void Slider(ref float value, float leftValue, float rightValue, float warningValue, float ErrorValue, Action OnWarnEnter = null, Action OnErrorEnter = null)
         {
-            return 0;
+            var warnStyle = new GUIStyle(GUI.skin.box);
+            warnStyle.margin = warnStyle.padding = warnStyle.border = new RectOffset(0, 0, 0, 0);
+            
+            GUILayout.Box(GUIContent.none, GUIStyle.none, GUILayout.ExpandWidth(true), GUILayout.Height(17));
+            // For Fix on Editor Layout
+
+            var lastRect = GUILayoutUtility.GetLastRect(); 
+            lastRect.x += warningValue * (lastRect.width - 65);
+            lastRect.width = lastRect.width - lastRect.x;
+            lastRect.height = 8;
+            lastRect.y += lastRect.height;
+            GUI.Box(lastRect, CreateBakcgroundColor( Mathf.RoundToInt(lastRect.width), Mathf.RoundToInt(lastRect.height), new Color(0.5f, 0.5f, 0, 0.5f)), warnStyle);
+            
+            lastRect = GUILayoutUtility.GetLastRect();
+            lastRect.x += ErrorValue * (lastRect.width - 65);
+            lastRect.width = lastRect.width - lastRect.x;
+            lastRect.height = 8;
+            lastRect.y += lastRect.height;
+            GUI.Box(lastRect, CreateBakcgroundColor( Mathf.RoundToInt(lastRect.width), Mathf.RoundToInt(lastRect.height), new Color(0.5f, 0.2f, 0.2f, 0.5f)), warnStyle);
+
+            value = EditorGUI.Slider(GUILayoutUtility.GetLastRect(), value, leftValue, rightValue);
+
+            if (value > ErrorValue)
+            {
+                if(OnErrorEnter != null) OnErrorEnter.Invoke();
+            }
+            else if (value > warningValue)
+            {
+                if(OnWarnEnter != null) OnWarnEnter.Invoke();
+            }
+        }
+
+        public static GUIContent CreateBakcgroundColor(int w, int h, Color c)
+        {
+            var tex = new Texture2D(w*10, h*10);
+
+            var pixels = new Color[w * 10 * h * 10];
+
+            for (var i = 0 ; i< pixels.Length ; i++)
+            {
+                pixels[i] = c;
+            }
+            
+            tex.SetPixels(pixels);
+            
+            tex.Apply();
+
+            return new GUIContent(tex);
         }
     }
 }
